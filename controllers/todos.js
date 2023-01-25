@@ -11,15 +11,17 @@ const addTodo = async (req, res) => {
 };
 
 const getTodo = (req, res) => {
-  res.status(201).json(req.params.id);
+  res.status(200).json(req.params.id);
 };
 
 const editTodo = (req, res) => {
-  res.status(201).send("Edit Todo");
+  res.status(200).send("Edit Todo");
 };
 
-const deleteTodo = (req, res) => {
-  res.status(201).send("Delete Todo");
+const deleteTodo = async (req, res) => {
+  const { id: todoID } = req.params;
+  const todo = await Todo.findOneAndDelete({ _id: todoID })
+  res.status(200).send();
 };
 
 module.exports = {

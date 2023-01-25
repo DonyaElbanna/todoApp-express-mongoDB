@@ -5,3 +5,24 @@
 .form {
   width: 60%;
 }
+
+#todos-list {
+  width: 60%;
+  margin: auto;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+.icon {
+  font-size: 20px !important;
+  cursor: pointer;
+}
+
+.delete {
+  border: none;
+}

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const TodoSchema = new mongoose.Schema({
   //   name: String,
   //   completed: Boolean, adding validators
-  name: {
+  todo: {
     type: String,
     required: [true, "must provide a todo"],
     trim: true,
