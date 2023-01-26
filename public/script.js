@@ -55,14 +55,14 @@ const addTodo = async () => {
     todoInput.value = "";
     msg.style.visibility = "visible";
     msg.classList.add("card", "border-success", "text-success");
-    msg.textContent = "Todo Added";
+    msg.textContent = "Success: Todo Added";
   } catch (error) {
     msg.style.visibility = "visible";
     msg.classList.add("card", "border-danger", "text-danger");
     if (todoInput.value.length === 0) {
       msg.textContent = "Error: todo cannot be empty";
-    } else if (todoInput.value.length > 20) {
-      msg.textContent = "Error: todo cannot exceed 20 charaters";
+    } else if (todoInput.value.length > 30) {
+      msg.textContent = "Error: todo cannot exceed 30 charaters";
     } else {
       msg.textContent = "An error occured, plaese try again";
     }
@@ -89,7 +89,7 @@ const deleteToggleTodo = async (e) => {
       getTodos();
       msg.style.visibility = "visible";
       msg.classList.add("card", "border-success", "text-success");
-      msg.textContent = "Todo Deleted";
+      msg.textContent = "Success: Todo Deleted";
       setTimeout(() => {
         msg.style.visibility = "hidden";
       }, 2000);
