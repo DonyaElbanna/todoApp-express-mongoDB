@@ -2,21 +2,24 @@ const todoInput = document.getElementById("input");
 const submitBtn = document.getElementById("submit-btn");
 const todosList = document.getElementById("todos-list");
 const msg = document.getElementById("msg");
+const unfinishedTodosDiv = document.getElementById("unfinished-todos");
 
 // Getting all todos
 const getTodos = async () => {
   try {
     const {
-      data: { todos },
+      data: { todos, unfinishedTodos },
     } = await axios.get("/api/todos");
-    // console.log(todos);
+    // console.log(todos, unfinishedTodos);
     const allTodos = todos.map((todoItem) => {
       const { completed, _id: todoID, todo } = todoItem;
       return `<div class="form-check">
       <div>
       <input class="form-check-input me-2" type="checkbox" id=${todoID} 
       ${completed ? "checked" : ""}>
-      <label class="form-check-label" for=${todoID}>
+      <label class="form-check-label" for=${todoID}  ${
+        completed && "style=text-decoration:line-through"
+      }>
         ${todo}
       </label>
       </div>
@@ -30,6 +33,12 @@ const getTodos = async () => {
     </div>`;
     });
     todosList.innerHTML = allTodos.join("");
+
+    if (unfinishedTodos === 0) {
+      unfinishedTodosDiv.innerHTML = "Nothing left to do!";
+    } else {
+      unfinishedTodosDiv.innerHTML = `Todos left: ${unfinishedTodos}`;
+    }
   } catch (error) {
     console.log(error);
   }
@@ -73,6 +82,7 @@ submitBtn.addEventListener("click", (e) => {
 // Deleting & toggling todo
 const deleteToggleTodo = async (e) => {
   let deleteID = e.target.parentElement.dataset.id;
+  // delete todo
   if (e.target.parentElement.classList.contains("delete")) {
     try {
       await axios.delete(`/api/todos/${deleteID}`);
@@ -86,11 +96,14 @@ const deleteToggleTodo = async (e) => {
     } catch (error) {
       console.log(error);
     }
+    // toggle todo
   } else if (e.target.classList.contains("form-check-input")) {
     let editID = e.target.id;
     try {
       const todoCompleted = document.getElementById(editID).checked;
       await axios.patch(`/api/todos/${editID}`, { completed: todoCompleted });
+      getTodos();
+      // unfinishedTodosDiv.innerHTML = `Todos Left: ${todoCompleted}`;
       // console.log(e.target, todoCompleted);
     } catch (error) {
       console.log(error);

@@ -33,5 +33,18 @@
   height: 27px;
   margin: 1rem auto;
   text-align: center;
-  /* visibility: visible; */
+}
+
+#unfinished-todos {
+  width: fit-content;
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: 10px;
+}
+
+.form-check-input:checked {
+  background-color: #2fa92b;
+  border-color: #2fa92b;
+  border-radius: 10px;
 }

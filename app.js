@@ -4,8 +4,8 @@ const todos = require("./routes/todos");
 const connectDB = require("./db/connect");
 require("dotenv").config();
 
-app.use(express.json());
 app.use(express.static("./public"));
+app.use(express.json());
 app.use("/api/todos", todos);
 
 const port = 5000;
