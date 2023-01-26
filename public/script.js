@@ -1,7 +1,7 @@
 const todoInput = document.getElementById("input");
 const submitBtn = document.getElementById("submit-btn");
 const todosList = document.getElementById("todos-list");
-// const deleteBtn = document.querySelectorA(".delete");
+const msg = document.getElementById("msg");
 
 // Getting all todos
 const getTodos = async () => {
@@ -9,7 +9,7 @@ const getTodos = async () => {
     const {
       data: { todos },
     } = await axios.get("/api/todos");
-    console.log(todos);
+    // console.log(todos);
     const allTodos = todos.map((todoItem) => {
       const { completed, _id: todoID, todo } = todoItem;
       return `<div class="form-check">
@@ -21,15 +21,6 @@ const getTodos = async () => {
       </label>
       </div>
       <div>
-      
-      <button class="edit">
-      <a href="edit-todo.html?id=${todoID}">
-      <span class="material-symbols-outlined icon edit">
-      edit
-    </span>
-    </a>
-      </button>
-      
       <button class="delete" data-id="${todoID}">
         <span class="material-symbols-outlined icon">
           delete
@@ -53,9 +44,25 @@ const addTodo = async () => {
     await axios.post("/api/todos", { todo });
     getTodos();
     todoInput.value = "";
+    msg.style.visibility = "visible";
+    msg.classList.add("card", "border-success", "text-success");
+    msg.textContent = "Todo Added";
   } catch (error) {
-    console.log(error);
+    msg.style.visibility = "visible";
+    msg.classList.add("card", "border-danger", "text-danger");
+    if (todoInput.value.length === 0) {
+      msg.textContent = "Error: todo cannot be empty";
+    } else if (todoInput.value.length > 20) {
+      msg.textContent = "Error: todo cannot exceed 20 charaters";
+    } else {
+      msg.textContent = "An error occured, plaese try again";
+    }
+    todoInput.value = "";
   }
+  setTimeout(() => {
+    msg.style.visibility = "hidden";
+    msg.removeAttribute("class");
+  }, 3000);
 };
 
 submitBtn.addEventListener("click", (e) => {
@@ -63,13 +70,19 @@ submitBtn.addEventListener("click", (e) => {
   addTodo();
 });
 
-// Deleting todo
+// Deleting & toggling todo
 const deleteToggleTodo = async (e) => {
   let deleteID = e.target.parentElement.dataset.id;
   if (e.target.parentElement.classList.contains("delete")) {
     try {
       await axios.delete(`/api/todos/${deleteID}`);
       getTodos();
+      msg.style.visibility = "visible";
+      msg.classList.add("card", "border-success", "text-success");
+      msg.textContent = "Todo Deleted";
+      setTimeout(() => {
+        msg.style.visibility = "hidden";
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
