@@ -1,7 +1,7 @@
 const todoInput = document.getElementById("input");
 const submitBtn = document.getElementById("submit-btn");
 const todosList = document.getElementById("todos-list");
-const deleteBtn = document.querySelector(".delete");
+// const deleteBtn = document.querySelectorA(".delete");
 
 // Getting all todos
 const getTodos = async () => {
@@ -15,15 +15,21 @@ const getTodos = async () => {
       return `<div class="form-check">
       <div>
       <input class="form-check-input me-2" type="checkbox" id=${todoID} 
-      ${completed ? "checked" : null}>
+      ${completed ? "checked" : ""}>
       <label class="form-check-label" for=${todoID}>
         ${todo}
       </label>
       </div>
       <div>
+      
+      <button class="edit">
+      <a href="edit-todo.html?id=${todoID}">
       <span class="material-symbols-outlined icon edit">
-        edit
-      </span>
+      edit
+    </span>
+    </a>
+      </button>
+      
       <button class="delete" data-id="${todoID}">
         <span class="material-symbols-outlined icon">
           delete
@@ -58,13 +64,24 @@ submitBtn.addEventListener("click", (e) => {
 });
 
 // Deleting todo
-const deleteTodo = async (e) => {
-  let id = e.target.parentElement.dataset.id;
-  try {
-    await axios.delete(`/api/todos/${id}`);
-    getTodos();
-  } catch (error) {
-    console.log(error);
+const deleteToggleTodo = async (e) => {
+  let deleteID = e.target.parentElement.dataset.id;
+  if (e.target.parentElement.classList.contains("delete")) {
+    try {
+      await axios.delete(`/api/todos/${deleteID}`);
+      getTodos();
+    } catch (error) {
+      console.log(error);
+    }
+  } else if (e.target.classList.contains("form-check-input")) {
+    let editID = e.target.id;
+    try {
+      const todoCompleted = document.getElementById(editID).checked;
+      await axios.patch(`/api/todos/${editID}`, { completed: todoCompleted });
+      // console.log(e.target, todoCompleted);
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
-todosList.addEventListener("click", deleteTodo);
+todosList.addEventListener("click", deleteToggleTodo);

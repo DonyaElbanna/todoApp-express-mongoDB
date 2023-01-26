@@ -14,13 +14,17 @@ const getTodo = (req, res) => {
   res.status(200).json(req.params.id);
 };
 
-const editTodo = (req, res) => {
-  res.status(200).send("Edit Todo");
+const editTodo = async (req, res) => {
+  const { id: todoID } = req.params;
+  const todo = await Todo.findOneAndUpdate({ _id: todoID }, req.body, {
+    new: true,
+  });
+  res.status(200).json({ todo });
 };
 
 const deleteTodo = async (req, res) => {
   const { id: todoID } = req.params;
-  const todo = await Todo.findOneAndDelete({ _id: todoID })
+  const todo = await Todo.findOneAndDelete({ _id: todoID });
   res.status(200).send();
 };
 
