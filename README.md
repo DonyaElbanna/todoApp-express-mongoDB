@@ -1,4 +1,4 @@
-## Todo App using Node and Express
+## Todo App using Express & MongoDB
 
 ## Description
 
